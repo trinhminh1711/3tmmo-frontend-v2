@@ -14,6 +14,7 @@ import Statistic from '../views/Statistic/Statistic'
 import StatisticOrder from '../views/Statistic/order/order'
 import Notification from '../views/Notifications/Notification'
 import ErrorPage from '../components/404'
+import FobidentPage from '../components/403'
 Vue.use(VueRouter)
 
 const routes = [
@@ -92,9 +93,9 @@ const routes = [
     component: ErrorPage
   },
   {
-    path: '*',
-    redirect: '/404',
-    component: ErrorPage
+    path: '/403',
+    name: 'fobidenpage',
+    component: FobidentPage
   },
 ];
 const router = new VueRouter({

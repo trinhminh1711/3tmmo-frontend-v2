@@ -35,7 +35,7 @@
             Thông tin cá nhân
           </router-link>
         </li>
-        <li v-if="showAdmin" class="item">
+        <li class="item">
           <router-link to="/listuser">
             <i class="fas fa-user-friends"></i>
             Danh sách user

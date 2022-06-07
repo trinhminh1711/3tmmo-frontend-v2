@@ -68,7 +68,7 @@
         <div
           @mouseover="selectUntil = true"
           @mouseleave="selectUntil = false"
-          class="relative pl-4"
+          class="relative pl-8"
         >
           <input
             disabled
@@ -119,7 +119,7 @@
         <tbody>
           <tr v-for="(item, idx) in desserts" :key="idx">
             <td class="ml-4" v-for="(label, index) in headers" :key="index">
-              {{ item[label.key] }}
+              <p>{{ item[label.key] }}</p>
             </td>
             <td>
               <v-btn @click="viewDetailOrder(item)" depressed small>
@@ -146,7 +146,24 @@
         :items="itemViewDetail"
         :items-per-page="10"
         class="elevation-1"
-      ></v-data-table>
+      >
+      <template v-slot:item.is_confirmed="{ item }">
+      <v-chip
+        :color="getColor(item.is_confirmed)"
+        dark
+      >
+        {{ item.is_confirmed }}
+      </v-chip>
+    </template>
+    <template v-slot:item.order_status="{ item }">
+      <v-chip
+        :color="getColorStatus(item.order_status)"
+        dark
+      >
+        {{ item.order_status }}
+      </v-chip>
+    </template>
+      </v-data-table>
       <v-card-title class="text-h5 grey lighten-2">
         Tổng hoa hồng tạm duyệt : {{ sumIncomeDetail }}
       </v-card-title>
@@ -257,6 +274,16 @@ export default {
     }
   },
   methods: {
+    getColor(is_confirmed) {
+      if (is_confirmed == "Chưa duyệt") return "purple";
+      else return "green";
+    },
+    getColorStatus(order_status)
+    {
+      if (order_status == "Đã hủy") return "red";
+      else if(order_status == "Đang xử lý") return "orange";
+      else return "light-green"
+    },
     resetTime() {
       this.sinceDate = new Date();
       this.untilDate = new Date();
@@ -279,7 +306,10 @@ export default {
         obj.merchant = element.merchant;
         obj.is_confirmed = this.convertConfirmStatus(element.is_confirmed);
         obj.order_status = this.convertStatus(element.order_status);
-        obj.reality_commission = element.reality_commission.toLocaleString(undefined, {maximumFractionDigits: 0});
+        obj.reality_commission = element.reality_commission.toLocaleString(
+          undefined,
+          { maximumFractionDigits: 0 }
+        );
         obj.click_time = this.formatUTCTime(element.click_time);
         obj.sales_time = this.formatUTCTime(element.sales_time);
         obj.confirmed_time = this.formatUTCTime(element.confirmed_time);
@@ -301,7 +331,7 @@ export default {
       } else if (status == 1) {
         return "Tạm duyệt";
       }
-      return "Đã hủy"
+      return "Đã hủy";
     },
     getOrder: async function() {
       this.desserts = await order.getOrderGroupUser(
@@ -323,7 +353,9 @@ export default {
       if (sumTotal != 0) {
         this.showTitle = true;
       }
-      this.sumAllOrder = sumTotal.toLocaleString(undefined, {maximumFractionDigits: 0});
+      this.sumAllOrder = sumTotal.toLocaleString(undefined, {
+        maximumFractionDigits: 0,
+      });
       this.persentReject = ((reject / approved) * 100).toFixed(2) + "%";
     },
     formatIsoTime(time) {
@@ -421,7 +453,8 @@ export default {
 }
 .time-picker {
   top: 100%;
-  left: 10px;
+  left: 15px;
+  width: 95%;
 }
 .absolute {
   position: absolute;
